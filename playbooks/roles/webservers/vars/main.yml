@@ -1,0 +1,3 @@
+nginx_user: apache
+nginx_group: apache
+nginx_web_dir: /usr/local

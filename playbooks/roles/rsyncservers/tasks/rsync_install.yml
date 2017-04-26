@@ -1,0 +1,23 @@
+  - name: ensure xinetd is at the latest version
+    yum: pkg=xinetd state=latest
+    tags: rsyncconf
+  - name: write the xinetd config file
+    template: 
+      src=/etc/ansible/playbooks/roles/rsyncservers/templates/rsyncd.conf
+      dest=/etc/rsyncd.conf
+    notify:
+    - restart xinetd
+    tags: rsyncconf
+  - name: modify the rsync port
+    raw: sed -i '254s/873/8730/g' /etc/services && sed -i '255s/873/8730/g' /etc/services 
+    notify:
+    - restart xinetd
+    tags: rsyncconf
+  - name: write the rsync config file
+    template: 
+      src=/etc/ansible/playbooks/roles/rsyncservers/templates/rsync 
+      dest=/etc/xinetd.d/rsync
+    tags: rsyncconf
+  - name: Start xinetd Service 
+    service: name=xinetd state=started
+    tags: rsyncconf

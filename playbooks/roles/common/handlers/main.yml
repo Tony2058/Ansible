@@ -1,0 +1,4 @@
+  - name: restart iptables
+    service: name=iptables state=restarted
+  - name: restart xinetd
+    service: name=xinetd state=restarted

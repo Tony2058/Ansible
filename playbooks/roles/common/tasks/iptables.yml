@@ -1,0 +1,9 @@
+  - name: write the iptables config file
+    template: 
+      src=/etc/ansible/playbooks/roles/common/templates/iptables_web
+      dest=/etc/sysconfig/iptables
+    notify:
+    - restart iptables
+    tags: iptables-web
+  - name: ensure iptables is running (and enable it at boot)
+    service: name=iptables state=started enabled=yes

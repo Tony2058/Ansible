@@ -1,0 +1,19 @@
+  - name: install the nginx from a remote repo
+    yum:
+      name: http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+      state: present
+  - name: ensure nginx is at the latest version
+    yum: pkg=nginx state=latest
+  - name: create nginx directory
+    file: dest={{ nginx_web_dir }}/{{ item.name }}//{{ item.vhosts }} state=directory owner={{ nginx_user }} group={{ nginx_group }} 
+    with_items:
+      - { name: 'logs', vhosts: 'www.github.com.cn' }
+    tags: nginxdir
+  - name: write the nginx config file
+    template: 
+      src=/etc/ansible/playbooks/roles/webservers/templates/nginx.conf 
+      dest=/etc/nginx/nginx.conf
+    tags: nginxconf
+  - name: Start Nginx Service 
+    service: name=nginx state=started
+    tags: nginxservice

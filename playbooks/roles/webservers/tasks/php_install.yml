@@ -1,0 +1,20 @@
+  - name: install the php56w from a remote repo
+    yum:
+      name: https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+      state: present
+  - name: ensure php56w is at the latest version
+    yum: pkg=php56w,php56w-mysql,php56w-pecl-igbinary,php56w-tidy,php56w-mcrypt,php56w-soap,php56w-mbstring,php56w-pdo,php56w-gd,php56w-pecl-redis,php56w-opcache,php56w-fpm,php56w-xml,php56w-mssql,php56w-pecl-memcache,php56w-ldap,php56w-pear,php56w-xmlrpc state=latest
+    tags: php56w
+  - name: write the php ini config file
+    template: 
+      src=/etc/ansible/playbooks/roles/webservers/templates/php.ini
+      dest=/etc/php.ini
+    tags: phpconf
+  - name: write the php fpm config file
+    template: 
+      src=/etc/ansible/playbooks/roles/webservers/templates/www.conf
+      dest=/etc/php-fpm.d/www.conf
+    tags: phpconf
+  - name: Start php-fpm Service 
+    service: name=php-fpm state=started
+    tags: phpservice
