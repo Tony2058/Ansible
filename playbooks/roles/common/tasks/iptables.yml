@@ -2,6 +2,10 @@
     template: 
       src=/etc/ansible/playbooks/roles/common/templates/iptables_web
       dest=/etc/sysconfig/iptables
+    when: ansible_nodename == "{{ item }}"
+    with_items:
+      - web01
+      - web02
     notify:
     - restart iptables
     tags: iptables-web
